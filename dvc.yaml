@@ -1,0 +1,29 @@
+stages:
+  ingest:
+    cmd: python src/data_ingest.py
+    deps:
+      - src/data_ingest.py
+      - src/config.py
+    outs:
+      - data/raw/dataset.csv:
+          persist: false
+
+  validate:
+    cmd: python src/data_validation.py
+    deps:
+      - src/data_validation.py
+      - src/config.py
+      - data/raw/dataset.csv
+    outs:
+      - data/processed/train.csv:
+          persist: false
+      - data/processed/test.csv:
+          persist: false
+
+  train:
+    cmd: python src/train.py
+    deps:
+      - src/train.py
+      - src/config.py
+      - data/processed/train.csv
+      - data/processed/test.csv

@@ -1,0 +1,51 @@
+name: MLOps End-to-End Pipeline CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  pipeline-and-build:
+    name: Test Pipeline & Docker Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Stage 1 - Ingest Synthetic Data
+        run: |
+          python src/data_ingest.py
+
+      - name: Stage 2 - Validate Schema with Pandera & Split
+        run: |
+          python src/data_validation.py
+
+      - name: Stage 3 - Train RandomForest & MLflow Model Registry
+        run: |
+          python src/train.py
+
+      - name: Stage 4 - Run Monitoring Smoke Test
+        run: |
+          python src/monitor.py
+
+      - name: Stage 5 - Run Pytest Suite
+        run: |
+          pytest tests/ -v
+
+      - name: Stage 6 - Build Docker Container
+        run: |
+          docker build -t mlops-blueprint:latest .

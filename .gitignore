@@ -1,0 +1,44 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+
+# MLflow Tracking & Artifacts
+mlruns/
+mlflow.db
+mlflow.db-journal
+
+# Project Logs and Reports
+logs/*.csv
+logs/*.log
+reports/*.html
+reports/*.json
+
+# Data files (keep directory tracking with .gitkeep)
+data/raw/*.csv
+data/processed/*.csv
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# DVC local files
+.dvc/cache/
+.dvc/tmp/
+.dvc/config.local
+
+# IDE & OS metadata
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
